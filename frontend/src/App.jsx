@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Navbar from './components/shared/Navbar'
 import Login from './components/auth/Login.jsx'
 import SignUp from './components/auth/SignUp.jsx'
+import Home from './components/Home.jsx'
 
 const appRouter = createBrowserRouter([
   {
@@ -20,9 +20,9 @@ const appRouter = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <div>
       <RouterProvider router = {appRouter} />
-    </>
+    </div>
   )
 }
 
