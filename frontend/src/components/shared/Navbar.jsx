@@ -3,10 +3,34 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { LogOut, User2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "@/redux/authSlice.js";
+import { toast } from "sonner";
+import axios from "axios";
+import { USER_API_END_POINT } from "@/utils/constant.js";
 
 export default function Navbar() {
-  const user = false;
+  const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logoutHandler = async () => {
+    try {
+      const res = await axios.get(`${USER_API_END_POINT}/logout`, {
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        dispatch(setUser(null));
+        navigate("/");
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Logout failed");
+    }
+  };
+
   return (
     <div className="bg-white">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
@@ -17,23 +41,39 @@ export default function Navbar() {
         </div>
         <div className="flex items-center gap-12">
           <ul className="flex font-medium items-center gap-5">
-            <li>Home</li>
-            <li>Jobs</li>
-            <li>Browse</li>
+            <li>
+              <Link to="/" className="hover:text-[#F83000] cursor-pointer">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/jobs" className="hover:text-[#F83000] cursor-pointer">
+                Jobs
+              </Link>
+            </li>
+            <li>
+              <Link to="/browse" className="hover:text-[#F83000] cursor-pointer">
+                Browse
+              </Link>
+            </li>
           </ul>
 
           {!user ? (
             <div className="flex items-center gap-2">
-              <Link to="/login"><Button variant="outline">Login</Button></Link>
-              <Link to="/signup"><Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">SignUp</Button></Link>
+              <Link to="/login">
+                <Button variant="outline">Login</Button>
+              </Link>
+              <Link to="/signup">
+                <Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">SignUp</Button>
+              </Link>
             </div>
           ) : (
             <Popover>
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer">
                   <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="@shadcn"
+                    src={user?.profile?.profilePhoto || "https://github.com/shadcn.png"}
+                    alt={user?.fullname || "Profile"}
                   />
                 </Avatar>
               </PopoverTrigger>
@@ -42,25 +82,29 @@ export default function Navbar() {
                   <div className="flex gap-2">
                     <Avatar className="cursor-pointer">
                       <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
+                        src={user?.profile?.profilePhoto || "https://github.com/shadcn.png"}
+                        alt={user?.fullname || "Profile"}
                       />
                     </Avatar>
                     <div>
-                      <h4 className="font-medium">Arin Jain</h4>
+                      <h4 className="font-medium">{user?.fullname || "User"}</h4>
                       <p className="text-sm text-muted-foreground">
-                        Lorem ipsum dolor sit amet.
+                        {user?.profile?.bio || "Welcome to CareerSearch"}
                       </p>
                     </div>
                   </div>
                   <div className="flex flex-col my-2 text-gray-600">
                     <div className="flex w-fit items-center gap-2 cursor-pointer">
                       <User2 />
-                      <Button variant="link">View Profile</Button>
+                      <Button variant="link">
+                        <Link to="/profile">View Profile</Link>
+                      </Button>
                     </div>
                     <div className="flex w-fit items-center gap-2 cursor-pointer">
                       <LogOut />
-                      <Button variant="link">Logout</Button>
+                      <Button variant="link" onClick={logoutHandler}>
+                        Logout
+                      </Button>
                     </div>
                   </div>
                 </div>
