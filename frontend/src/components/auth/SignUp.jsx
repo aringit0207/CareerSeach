@@ -8,6 +8,9 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constant.js";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/redux/authSlice.js";
+import { Loader2 } from "lucide-react";
 
 export default function SignUp() {
   const [input, setInput] = useState({
@@ -19,18 +22,94 @@ export default function SignUp() {
     file: "",
   });
 
+  const [errors, setErrors] = useState({});
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading } = useSelector((store) => store.auth);
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhoneNumber = (phone) => {
+    const phoneRegex = /^\d{10}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const validatePassword = (password) => {
+    // At least 5 characters, at least one special character
+    const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{5,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!input.fullname.trim()) {
+      newErrors.fullname = "Full name is required";
+    }
+
+    if (!input.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(input.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!input.phoneNumber.trim()) {
+      newErrors.phoneNumber = "Phone number is required";
+    } else if (!validatePhoneNumber(input.phoneNumber)) {
+      newErrors.phoneNumber = "Phone number must be exactly 10 digits";
+    }
+
+    if (!input.password) {
+      newErrors.password = "Password is required";
+    } else if (!validatePassword(input.password)) {
+      newErrors.password = "Password must be at least 8 characters long and contain at least one special character";
+    }
+
+    if (!input.role) {
+      newErrors.role = "Please select a role";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const changeEventHandler = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setInput({ ...input, [name]: value });
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
   };
 
   const changeFileHandler = (e) => {
     setInput({ ...input, file: e.target.files?.[0] });
   };
 
+  const handlePhoneChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    if (value.length <= 10) {
+      setInput({ ...input, phoneNumber: value });
+      // Clear error when user starts typing
+      if (errors.phoneNumber) {
+        setErrors({ ...errors, phoneNumber: "" });
+      }
+    }
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      toast.error("Please fix the errors!");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("fullname", input.fullname);
     formData.append("email", input.email);
@@ -42,6 +121,7 @@ export default function SignUp() {
     }
 
     try {
+      dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
         headers: {
           "Content-Type": "multipart/form-data"
@@ -56,103 +136,134 @@ export default function SignUp() {
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="flex items-center justify-center max-w-7xl mx-auto">
+      <div className="flex items-center justify-center max-w-7xl mx-auto px-4">
         <form
           onSubmit={submitHandler}
-          className="w-1/2 border border-gray-200 rounded-md p-4 my-10"
+          className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-sm p-6 my-10"
         >
-          <h1 className="font-bold text-xl mb-5">SignUp</h1>
-          <div className="my-2">
-            <Label>Full Name</Label>
-            <Input
-              type="text"
-              value={input.fullname}
-              name="fullname"
-              onChange={changeEventHandler}
-              placeholder="Eg:- Akshay Kumar"
-            />
-          </div>
-          <div className="my-2">
-            <Label>Email</Label>
-            <Input
-              type="email"
-              value={input.email}
-              name="email"
-              onChange={changeEventHandler}
-              placeholder="Eg:- xyz@gmail.com"
-            />
-          </div>
-          <div className="my-2">
-            <Label>Phone Number</Label>
-            <Input
-              type="text"
-              value={input.phoneNumber}
-              name="phoneNumber"
-              onChange={changeEventHandler}
-              placeholder="Eg:- 0123456789"
-            />
-          </div>
-          <div className="my-2">
-            <Label>Password</Label>
-            <Input
-              type="password"
-              value={input.password}
-              name="password"
-              onChange={changeEventHandler}
-              placeholder="Enter Your Password Here!"
-            />
-          </div>
+          <h1 className="font-bold text-2xl mb-6 text-center text-gray-800">Create Account</h1>
+          
+          <div className="space-y-4">
+            <div>
+              <Label className="text-gray-700 font-medium">Full Name</Label>
+              <Input
+                type="text"
+                value={input.fullname}
+                name="fullname"
+                onChange={changeEventHandler}
+                placeholder="Enter your full name"
+                className={`mt-1 ${errors.fullname ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
+              />
+              {errors.fullname && <p className="text-red-500 text-sm mt-1">{errors.fullname}</p>}
+            </div>
 
-          <div className="flex items-center justify-between">
-            <RadioGroup className="flex items-center gap-4 my-5">
-              <div className="flex items-center gap-3">
-                <Input
-                  type="radio"
-                  name="role"
-                  value="student"
-                  checked={input.role === "student"}
-                  onChange={changeEventHandler}
-                  className="cursor-pointer"
-                />
-                <Label htmlFor="r1">Student</Label>
-              </div>
-              <div className="flex items-center gap-3">
-                <Input
-                  type="radio"
-                  name="role"
-                  value="recruiter"
-                  checked={input.role === "recruiter"}
-                  onChange={changeEventHandler}
-                  className="cursor-pointer"
-                />
-                <Label htmlFor="r2">Recruiter</Label>
-              </div>
-            </RadioGroup>
-            <div className="flex items-center gap-2">
-              <Label>Profile</Label>
+            <div>
+              <Label className="text-gray-700 font-medium">Email</Label>
+              <Input
+                type="email"
+                value={input.email}
+                name="email"
+                onChange={changeEventHandler}
+                placeholder="Enter your email address"
+                className={`mt-1 ${errors.email ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
+              />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+            </div>
+
+            <div>
+              <Label className="text-gray-700 font-medium">Phone Number</Label>
+              <Input
+                type="tel"
+                value={input.phoneNumber}
+                name="phoneNumber"
+                onChange={handlePhoneChange}
+                placeholder="Enter 10-digit phone number"
+                maxLength="10"
+                className={`mt-1 ${errors.phoneNumber ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
+              />
+              {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>}
+            </div>
+
+            <div>
+              <Label className="text-gray-700 font-medium">Password</Label>
+              <Input
+                type="password"
+                value={input.password}
+                name="password"
+                onChange={changeEventHandler}
+                placeholder="Create a strong password (at least one special character)"
+                className={`mt-1 ${errors.password ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
+              />
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+            </div>
+
+            <div>
+              <Label className="text-gray-700 font-medium mb-3 block">Select Role</Label>
+              <RadioGroup className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="radio"
+                    name="role"
+                    value="student"
+                    checked={input.role === "student"}
+                    onChange={changeEventHandler}
+                    className="cursor-pointer w-4 h-4"
+                  />
+                  <Label htmlFor="r1" className="cursor-pointer text-gray-700">Student</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="radio"
+                    name="role"
+                    value="recruiter"
+                    checked={input.role === "recruiter"}
+                    onChange={changeEventHandler}
+                    className="cursor-pointer w-4 h-4"
+                  />
+                  <Label htmlFor="r2" className="cursor-pointer text-gray-700">Recruiter</Label>
+                </div>
+              </RadioGroup>
+              {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role}</p>}
+            </div>
+
+            <div>
+              <Label className="text-gray-700 font-medium">Profile Picture <span className="text-gray-500 font-normal">(Optional)</span></Label>
               <Input
                 accept="image/*"
                 type="file"
                 onChange={changeFileHandler}
-                className="cursor-pointer"
+                className="mt-1 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
+              <p className="text-gray-500 text-xs mt-1">You can add a profile picture now or later</p>
             </div>
           </div>
-          <Button type="submit" className="w-full my-4">
-            SignUp
-          </Button>
-          <span className="text-sm">
-            Already have an account?{" "}
-            <Link to="/login" className="text-blue-600">
-              Login
-            </Link>
-          </span>
+          
+          {loading ? (
+            <Button disabled className="w-full mt-6 bg-blue-600 hover:bg-blue-700">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating Account...
+            </Button>
+          ) : (
+            <Button type="submit" className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2">
+              Create Account
+            </Button>
+          )}
+          
+          <div className="text-center mt-4">
+            <span className="text-gray-600 text-sm">
+              Already have an account?{" "}
+              <Link to="/login" className="text-blue-600 hover:text-blue-800 font-medium">
+                Sign In
+              </Link>
+            </span>
+          </div>
         </form>
       </div>
     </div>
