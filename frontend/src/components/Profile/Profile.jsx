@@ -55,11 +55,11 @@ export default function Profile() {
           <Label className="text-md font-bold">Resume</Label>
           {isResume ? (
             <a
-              target="blank"
-              href="https://youtube.com"
+              target="_blank"
+              href={user?.profile?.resume}
               className="text-blue-500 w-full hover:underline cursor-pointer"
             >
-              My_Resume
+              {user?.profile?.resumeOriginalName}
             </a>
           ) : (
             <span>NA</span>
