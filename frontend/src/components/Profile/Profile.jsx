@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 export default function Profile() {
   const isResume = true;
   const [open, setOpen] = useState(false);
-  const {user} = useSelector(store => store.auth);
+  const { user } = useSelector((store) => store.auth);
   return (
     <div>
       <Navbar />
@@ -20,14 +20,23 @@ export default function Profile() {
         <div className="flex justify-between">
           <div className="flex items-center gap-4">
             <Avatar className="h-24 w-24">
-              <AvatarImage src="https://www.shutterstock.com/image-vector/circle-line-simple-design-logo-600nw-2174926871.jpg" />
+              <AvatarImage
+                src={
+                  user?.profile?.profilePhoto ||
+                  "https://github.com/shadcn.png"
+                }
+              />
             </Avatar>
             <div>
               <h1 className="font-medium text-xl">{user?.fullname}</h1>
               <p>{user?.profile?.bio}</p>
             </div>
           </div>
-          <Button onClick={() => setOpen(true)} className="text-right" variant="outline">
+          <Button
+            onClick={() => setOpen(true)}
+            className="text-right"
+            variant="outline"
+          >
             <Pen />
           </Button>
         </div>
@@ -44,7 +53,9 @@ export default function Profile() {
             <h1>Skills</h1>
             <div className="flex items-center gap-1">
               {user?.profile?.skills.length != 0 ? (
-                user?.profile?.skills.map((item, index) => <Badge key={index}>{item}</Badge>)
+                user?.profile?.skills.map((item, index) => (
+                  <Badge key={index}>{item}</Badge>
+                ))
               ) : (
                 <span>NA</span>
               )}
@@ -70,7 +81,7 @@ export default function Profile() {
         <h1 className="font-bold text-lg my-5">Applied Jobs</h1>
         <AppliedJobs />
       </div>
-      <UpdateProfile open={open} setOpen={setOpen}/>
+      <UpdateProfile open={open} setOpen={setOpen} />
     </div>
   );
 }

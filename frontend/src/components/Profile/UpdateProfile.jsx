@@ -27,7 +27,8 @@ export default function UpdateProfile({ open, setOpen }) {
     phoneNumber: user?.phoneNumber,
     bio: user?.profile?.bio,
     skills: user?.profile?.skills?.map((skill) => skill),
-    file: user?.profile?.resume,
+    profilePhoto: null,
+    resume: null,
   });
 
   const changeEventHandler = (e) => {
@@ -36,7 +37,8 @@ export default function UpdateProfile({ open, setOpen }) {
 
   const fileChangeHandler = (e) => {
     const file = e.target.files?.[0];
-    setInput({ ...input, file });
+    const fieldName = e.target.name;
+    setInput({ ...input, [fieldName]: file });
   };
 
   const submitHandler = async (e) => {
@@ -47,12 +49,16 @@ export default function UpdateProfile({ open, setOpen }) {
     formData.append("phoneNumber", input.phoneNumber);
     formData.append("bio", input.bio);
     formData.append("skills", input.skills);
-    if (input.file) {
-      formData.append("file", input.file);
+    
+    // Only append file if either profilePhoto or resume is selected
+    if (input.profilePhoto) {
+      formData.append("file", input.profilePhoto);
+    } else if (input.resume) {
+      formData.append("file", input.resume);
     }
 
     try {
-        setLoading(true);
+      setLoading(true);
       const res = await axios.post(
         `${USER_API_END_POINT}/profile/update`,
         formData,
@@ -70,8 +76,8 @@ export default function UpdateProfile({ open, setOpen }) {
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
-    } finally{
-        setLoading(false);
+    } finally {
+      setLoading(false);
     }
     setOpen(false);
     console.log(input);
@@ -152,12 +158,25 @@ export default function UpdateProfile({ open, setOpen }) {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="file" className="text-right">
+                <Label htmlFor="profilePhoto" className="text-right">
+                  Profile Photo
+                </Label>
+                <Input
+                  id="profilePhoto"
+                  name="profilePhoto"
+                  type="file"
+                  accept="image/*"
+                  onChange={fileChangeHandler}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="resume" className="text-right">
                   Resume
                 </Label>
                 <Input
-                  id="file"
-                  name="file"
+                  id="resume"
+                  name="resume"
                   type="file"
                   accept="application/pdf,.doc,.docx"
                   onChange={fileChangeHandler}

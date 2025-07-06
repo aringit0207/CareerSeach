@@ -14,6 +14,10 @@ export const register = async (req,res) => {
             });
         }
 
+        const file = req.file;
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
         const user = await User.findOne({email});
         if(user) {
             return res.status(400).json({
@@ -29,7 +33,10 @@ export const register = async (req,res) => {
             email,
             phoneNumber,
             password: hashedPassword,
-            role
+            role,
+            profile:{
+                profilePhoto: cloudResponse.secure_url,
+            }
         })
 
         return res.status(201).json({
@@ -114,8 +121,13 @@ export const updateProfile = async (req,res) => {
     try {
         const {fullname, email, phoneNumber, bio, skills} = req.body;
         const file = req.file;
-        const fileUri = getDataUri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        
+        // Handle file upload only if a file is provided
+        let cloudResponse;
+        if (file) {
+            const fileUri = getDataUri(file);
+            cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        }
 
         let skillsArray;
         if(skills){
@@ -133,13 +145,25 @@ export const updateProfile = async (req,res) => {
 
         if(fullname) user.fullname = fullname
         if(email) user.email = email
-        if(phoneNumber)  user.phoneNumber = phoneNumber
+        if(phoneNumber) user.phoneNumber = phoneNumber
         if(bio) user.profile.bio = bio
         if(skills) user.profile.skills = skillsArray
 
+        // Handle file upload based on file type
         if(cloudResponse) {
-            user.profile.resume = cloudResponse.secure_url
-            user.profile.resumeOriginalName = file.originalname
+            // Check if the uploaded file is a resume (PDF, DOC, DOCX) or image
+            const fileExtension = file.originalname.split('.').pop().toLowerCase();
+            const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            const resumeExtensions = ['pdf', 'doc', 'docx'];
+            
+            if (imageExtensions.includes(fileExtension)) {
+                // Update profile photo
+                user.profile.profilePhoto = cloudResponse.secure_url;
+            } else if (resumeExtensions.includes(fileExtension)) {
+                // Update resume
+                user.profile.resume = cloudResponse.secure_url;
+                user.profile.resumeOriginalName = file.originalname;
+            }
         }
 
         await user.save();
@@ -161,5 +185,9 @@ export const updateProfile = async (req,res) => {
 
     } catch (error) {
         console.log("Error in updating the profile! Error: ", error);
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false
+        });
     }
 }
