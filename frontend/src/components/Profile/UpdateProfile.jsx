@@ -159,7 +159,7 @@ export default function UpdateProfile({ open, setOpen }) {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="profilePhoto" className="text-right">
-                  Profile Photo
+                  Profile Pic
                 </Label>
                 <Input
                   id="profilePhoto"
