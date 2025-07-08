@@ -40,23 +40,54 @@ export default function Navbar() {
           </h1>
         </div>
         <div className="flex items-center gap-12">
-          <ul className="flex font-medium items-center gap-5">
-            <li>
-              <Link to="/" className="hover:text-[#F83000] cursor-pointer">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/jobs" className="hover:text-[#F83000] cursor-pointer">
-                Jobs
-              </Link>
-            </li>
-            <li>
-              <Link to="/browse" className="hover:text-[#F83000] cursor-pointer">
-                Browse
-              </Link>
-            </li>
-          </ul>
+          {user && user.role == "recruiter" ? (
+            <>
+              <ul className="flex font-medium items-center gap-5">
+                <li>
+                  <Link
+                    to="/admin/companies"
+                    className="hover:text-[#F83000] cursor-pointer"
+                  >
+                    Companies
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/admin/jobs"
+                    className="hover:text-[#F83000] cursor-pointer"
+                  >
+                    Jobs
+                  </Link>
+                </li>
+              </ul>
+            </>
+          ) : (
+            <>
+              <ul className="flex font-medium items-center gap-5">
+                <li>
+                  <Link to="/" className="hover:text-[#F83000] cursor-pointer">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/jobs"
+                    className="hover:text-[#F83000] cursor-pointer"
+                  >
+                    Jobs
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/browse"
+                    className="hover:text-[#F83000] cursor-pointer"
+                  >
+                    Browse
+                  </Link>
+                </li>
+              </ul>
+            </>
+          )}
 
           {!user ? (
             <div className="flex items-center gap-2">
@@ -64,7 +95,9 @@ export default function Navbar() {
                 <Button variant="outline">Login</Button>
               </Link>
               <Link to="/signup">
-                <Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">SignUp</Button>
+                <Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">
+                  SignUp
+                </Button>
               </Link>
             </div>
           ) : (
@@ -72,7 +105,10 @@ export default function Navbar() {
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer">
                   <AvatarImage
-                    src={user?.profile?.profilePhoto || "https://github.com/shadcn.png"}
+                    src={
+                      user?.profile?.profilePhoto ||
+                      "https://github.com/shadcn.png"
+                    }
                     alt={user?.fullname || "Profile"}
                   />
                 </Avatar>
@@ -82,24 +118,31 @@ export default function Navbar() {
                   <div className="flex gap-2">
                     <Avatar className="cursor-pointer">
                       <AvatarImage
-                        src={user?.profile?.profilePhoto || "https://github.com/shadcn.png"}
+                        src={
+                          user?.profile?.profilePhoto ||
+                          "https://github.com/shadcn.png"
+                        }
                         alt={user?.fullname || "Profile"}
                       />
                     </Avatar>
                     <div>
-                      <h4 className="font-medium">{user?.fullname || "User"}</h4>
+                      <h4 className="font-medium">
+                        {user?.fullname || "User"}
+                      </h4>
                       <p className="text-sm text-muted-foreground">
                         {user?.profile?.bio || "Welcome to CareerSearch"}
                       </p>
                     </div>
                   </div>
                   <div className="flex flex-col my-2 text-gray-600">
-                    <div className="flex w-fit items-center gap-2 cursor-pointer">
-                      <User2 />
-                      <Button variant="link">
-                        <Link to="/profile">View Profile</Link>
-                      </Button>
-                    </div>
+                    {user && user.role == "student" && (
+                      <div className="flex w-fit items-center gap-2 cursor-pointer">
+                        <User2 />
+                        <Button variant="link">
+                          <Link to="/profile">View Profile</Link>
+                        </Button>
+                      </div>
+                    )}
                     <div className="flex w-fit items-center gap-2 cursor-pointer">
                       <LogOut />
                       <Button variant="link" onClick={logoutHandler}>
