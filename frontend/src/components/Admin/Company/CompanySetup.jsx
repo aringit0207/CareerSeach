@@ -9,8 +9,11 @@ import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { COMPANY_API_END_POINT } from "@/utils/constant";
+import useGetCompanyById from "@/hooks/useGetCompanyById";
 
 export default function CompanySetup() {
+  const params = useParams();
+  useGetCompanyById(params.id);
   const [input, setInput] = useState({
     name: "",
     description: "",
@@ -21,7 +24,6 @@ export default function CompanySetup() {
 
   const { singleCompany } = useSelector((store) => store.company);
   const [loading, setLoading] = useState(false);
-  const params = useParams();
   const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
@@ -86,7 +88,7 @@ export default function CompanySetup() {
             <Button
               variant="outline"
               onClick={() => navigate("/admin/companies")}
-              className="flex items-center gap-2 text-gray-500 font-semibold"
+              className="flex items-center gap-2 text-gray-700 font-semibold"
             >
               <ArrowLeft />
               <span>Back</span>
