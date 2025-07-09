@@ -2,7 +2,7 @@ import React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { LogOut, User2 } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "@/redux/authSlice.js";
@@ -15,6 +15,7 @@ export default function Navbar() {
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const logoutHandler = async () => {
     try {
@@ -35,19 +36,29 @@ export default function Navbar() {
   const handleBrowseClick = () => {
     dispatch(setSearchedQuery(""));
     navigate("/browse");
+    setMobileMenuOpen(false);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
   };
 
   // Helper function to render navigation links based on user role
-  const renderNavigationLinks = () => {
+  const renderNavigationLinks = (mobile = false) => {
     if (!user) return null;
+
+    const linkClass = mobile 
+      ? "block py-2 px-4 hover:bg-gray-100 rounded-md transition-colors"
+      : "hover:text-[#F83000] cursor-pointer transition-colors";
 
     if (user.role === "recruiter") {
       return (
-        <ul className="flex font-medium items-center gap-5">
+        <ul className={mobile ? "space-y-2" : "flex font-medium items-center gap-5"}>
           <li>
             <Link
               to="/admin/companies"
-              className="hover:text-[#F83000] cursor-pointer"
+              className={linkClass}
+              onClick={mobile ? closeMobileMenu : undefined}
             >
               Companies
             </Link>
@@ -55,7 +66,8 @@ export default function Navbar() {
           <li>
             <Link
               to="/admin/jobs"
-              className="hover:text-[#F83000] cursor-pointer"
+              className={linkClass}
+              onClick={mobile ? closeMobileMenu : undefined}
             >
               Jobs
             </Link>
@@ -66,16 +78,20 @@ export default function Navbar() {
 
     if (user.role === "student") {
       return (
-        <ul className="flex font-medium items-center gap-5">
+        <ul className={mobile ? "space-y-2" : "flex font-medium items-center gap-5"}>
           <li>
-            <Link to="/jobs" className="hover:text-[#F83000] cursor-pointer">
+            <Link 
+              to="/jobs" 
+              className={linkClass}
+              onClick={mobile ? closeMobileMenu : undefined}
+            >
               Jobs
             </Link>
           </li>
           <li>
             <button
               onClick={handleBrowseClick}
-              className="hover:text-[#F83000] cursor-pointer"
+              className={linkClass}
             >
               Browse
             </button>
@@ -86,9 +102,13 @@ export default function Navbar() {
 
     // Default navigation for other roles or fallback
     return (
-      <ul className="flex font-medium items-center gap-5">
+      <ul className={mobile ? "space-y-2" : "flex font-medium items-center gap-5"}>
         <li>
-          <Link to="/" className="hover:text-[#F83000] cursor-pointer">
+          <Link 
+            to="/" 
+            className={linkClass}
+            onClick={mobile ? closeMobileMenu : undefined}
+          >
             Home
           </Link>
         </li>
@@ -97,8 +117,8 @@ export default function Navbar() {
   };
 
   return (
-    <div className="bg-white">
-      <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
+    <div className="bg-white shadow-sm sticky top-0 z-50">
+      <div className="flex items-center justify-between mx-auto max-w-7xl h-16 px-4">
         <div>
           <Link to="/" className="cursor-pointer">
             <h1 className="text-2xl font-bold">
@@ -106,7 +126,9 @@ export default function Navbar() {
             </h1>
           </Link>
         </div>
-        <div className="flex items-center gap-12">
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-12">
           {renderNavigationLinks()}
 
           {!user ? (
@@ -123,7 +145,7 @@ export default function Navbar() {
           ) : (
             <Popover>
               <PopoverTrigger asChild>
-                <Avatar className="cursor-pointer">
+                <Avatar className="cursor-pointer hover:ring-2 hover:ring-[#F83000] transition-all">
                   <AvatarImage
                     src={
                       user?.profile?.profilePhoto ||
@@ -135,7 +157,7 @@ export default function Navbar() {
               </PopoverTrigger>
               <PopoverContent className="w-80">
                 <div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-3 p-2 hover:bg-gray-100 rounded-md transition-colors">
                     <Avatar className="cursor-pointer">
                       <AvatarImage
                         src={
@@ -145,27 +167,18 @@ export default function Navbar() {
                         alt={user?.fullname || "Profile"}
                       />
                     </Avatar>
-                    <div>
-                      <h4 className="font-medium">
-                        {user?.fullname || "User"}
-                      </h4>
-                      <p className="text-sm text-muted-foreground">
-                        {user?.profile?.bio || "Welcome to CareerSearch"}
-                      </p>
+                    <div className="flex-1">
+                      <Link to="/profile" className="cursor-pointer block">
+                        <h4 className="font-medium text-gray-800">
+                          {user?.fullname || "User"}
+                        </h4>
+                      </Link>
                     </div>
                   </div>
                   <div className="flex flex-col my-2 text-gray-600">
-                    {user && user.role === "student" && (
-                      <div className="flex w-fit items-center gap-2 cursor-pointer">
-                        <User2 />
-                        <Button variant="link">
-                          <Link to="/profile">View Profile</Link>
-                        </Button>
-                      </div>
-                    )}
-                    <div className="flex w-fit items-center gap-2 cursor-pointer">
-                      <LogOut />
-                      <Button variant="link" onClick={logoutHandler}>
+                    <div className="flex w-full items-center gap-2 cursor-pointer p-2 hover:bg-gray-100 rounded-md transition-colors">
+                      <LogOut className="w-4 h-4" />
+                      <Button variant="link" onClick={logoutHandler} className="p-0">
                         Logout
                       </Button>
                     </div>
@@ -175,7 +188,71 @@ export default function Navbar() {
             </Popover>
           )}
         </div>
+
+        {/* Mobile menu button */}
+        <div className="md:hidden flex items-center gap-4">
+          {user && (
+            <Avatar className="cursor-pointer hover:ring-2 hover:ring-[#F83000] transition-all">
+              <AvatarImage
+                src={
+                  user?.profile?.profilePhoto ||
+                  "https://github.com/shadcn.png"
+                }
+                alt={user?.fullname || "Profile"}
+              />
+            </Avatar>
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
+        </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t bg-white absolute w-full shadow-md">
+          <div className="px-4 py-4 space-y-3">
+            {renderNavigationLinks(true)}
+            
+            {!user ? (
+              <div className="flex flex-col space-y-2 pt-4 border-t">
+                <Link to="/login" onClick={closeMobileMenu}>
+                  <Button variant="outline" className="w-full">Login</Button>
+                </Link>
+                <Link to="/signup" onClick={closeMobileMenu}>
+                  <Button className="bg-[#6A38C2] hover:bg-[#5b30a6] w-full">
+                    SignUp
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="pt-4 border-t">
+                <Link to="/profile" className="block p-2 hover:bg-gray-100 rounded-md">
+                  <div className="flex items-center gap-3">
+                    <div>
+                      <h4 className="font-medium text-gray-800">
+                        {user?.fullname || "User"}
+                      </h4>
+                    </div>
+                  </div>
+                </Link>
+                <Button
+                  variant="ghost"
+                  onClick={logoutHandler}
+                  className="w-full justify-start p-2 mt-2"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

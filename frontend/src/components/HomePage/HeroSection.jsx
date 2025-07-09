@@ -16,20 +16,20 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="text-center">
+    <div className="text-center px-4">
       <div className="flex flex-col gap-5 my-10">
         <span className="mx-auto px-4 py-2 rounded-full bg-gray-100 text-[#F83002] font-medium">
           No.1 JobHunt Website
         </span>
-        <h1 className="text-5xl font-bold">
+        <h1 className="text-3xl md:text-5xl font-bold">
           Search, Apply & <br /> Get Your{" "}
           <span className="text-[#6A38C2]">Dream Job</span>
         </h1>
-        <p>
+        <p className="text-gray-600 max-w-2xl mx-auto">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi
           deleniti explicabo distinctio ut eum.
         </p>
-        <div className="flex w-[40%] shadow-lg border border-gray-200 pl-3 rounded-full items-center gap-4 mx-auto">
+        <div className="flex w-full max-w-md md:max-w-lg shadow-lg border border-gray-200 pl-3 rounded-full items-center gap-4 mx-auto">
           <input
             type="text"
             placeholder="Find Your Dream Job"

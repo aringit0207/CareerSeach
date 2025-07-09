@@ -2,18 +2,22 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-t-gray-200 py-8">
-      <div className="container mx-auto px-4">
+    <footer className="border-t border-gray-200 bg-gray-50 mt-auto">
+      <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
-            <h2 className="text-xl font-bold">Career Search</h2>
-            <p className="text-sm">© 2025 CareerSearch. All rights reserved.</p>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              Career<span className="text-[#F83000]">Search</span>
+            </h2>
+            <p className="text-sm text-gray-500">
+              © 2025 CareerSearch. All rights reserved.
+            </p>
           </div>
 
-          <div className="flex space-x-4 mt-4 md:mt-0">
+          <div className="flex space-x-6 mt-4 md:mt-0">
             <a
               href="https://facebook.com"
-              className="hover:text-gray-400"
+              className="text-gray-600 hover:text-[#F83000] transition-colors"
               aria-label="Facebook"
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -22,7 +26,7 @@ export default function Footer() {
             </a>
             <a
               href="https://twitter.com"
-              className="hover:text-gray-400"
+              className="text-gray-600 hover:text-[#F83000] transition-colors"
               aria-label="Twitter"
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -31,7 +35,7 @@ export default function Footer() {
             </a>
             <a
               href="https://linkedin.com"
-              className="hover:text-gray-400"
+              className="text-gray-600 hover:text-[#F83000] transition-colors"
               aria-label="LinkedIn"
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

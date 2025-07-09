@@ -15,14 +15,14 @@ export default function Browse() {
   return (
     <div>
       <Navbar />
-      <div className="max-w-7xl mx-auto my-10">
-        <h1 className="font-bold text-xl my-10">
+      <div className="max-w-7xl mx-auto my-10 px-4">
+        <h1 className="font-bold text-lg md:text-xl my-10">
           {searchedQuery 
             ? `Search Results (${jobsToDisplay.length})` 
             : `All Jobs (${jobsToDisplay.length})`
           }
         </h1>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {jobsToDisplay.map((job) => {
             return <Job key={job._id} job={job} />;
           })}

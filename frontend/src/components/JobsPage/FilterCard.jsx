@@ -8,7 +8,7 @@ import { setSearchedQuery } from "@/redux/jobSlice";
 export default function FilterCard() {
   const filterData = [
     {
-      filterType: "Industry",
+      filterType: "Title",
       array: ["Frontend Developer", "Backend Developer", "FullStack Developer"],
     },
     {
@@ -107,59 +107,63 @@ export default function FilterCard() {
   }, [selectedFilters, dispatch]);
 
   return (
-    <div className="w-full bg-white p-3 rounded-md">
+    <div className="w-full bg-white p-3 rounded-lg shadow-sm border border-gray-200 sticky top-5">
       <div className="flex justify-between items-center mb-3">
-        <h1 className="font-bold text-lg">Filter Jobs</h1>
+        <h1 className="font-semibold text-base text-gray-800">Filter Jobs</h1>
         <button 
           onClick={clearAllFilters}
-          className="text-sm text-blue-600 hover:underline"
+          className="text-xs text-blue-600 hover:text-blue-700 transition-colors"
         >
           Clear All
         </button>
       </div>
-      <hr className="mt-3" />
       
-      {filterData.map((data, index) => (
-        <div key={index} className="mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <h1 className="font-bold text-lg">{data.filterType}</h1>
-            {selectedFilters[data.filterType] && (
-              <button 
-                onClick={() => clearFilter(data.filterType)}
-                className="text-xs text-red-600 hover:underline"
-              >
-                Clear
-              </button>
-            )}
+      <div className="space-y-4">
+        {filterData.map((data, index) => (
+          <div key={index} className="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="font-medium text-sm text-gray-700">{data.filterType}</h2>
+              {selectedFilters[data.filterType] && (
+                <button 
+                  onClick={() => clearFilter(data.filterType)}
+                  className="text-xs text-red-500 hover:text-red-600 transition-colors"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+            
+            {/* Search Bar */}
+            <div className="mb-2">
+              <Input
+                placeholder={`Find more ${data.filterType.toLowerCase()}...`}
+                value={searchQueries[data.filterType]}
+                onChange={(e) => handleSearchChange(data.filterType, e.target.value)}
+                className="text-xs h-8"
+              />
+            </div>
+            
+            {/* Radio Options - always show all options */}
+            <RadioGroup 
+              value={selectedFilters[data.filterType]} 
+              onValueChange={(value) => changeHandler(data.filterType, value)}
+              className="space-y-1"
+            >
+              {getAllOptions(data.filterType).map((item, idx) => {
+                const itemId = `${data.filterType}-${idx}`;
+                return (
+                  <div key={idx} className="flex items-center space-x-2">
+                    <RadioGroupItem value={item} id={itemId} className="text-blue-600" />
+                    <Label htmlFor={itemId} className="text-xs text-gray-600 cursor-pointer hover:text-gray-800 transition-colors">
+                      {item}
+                    </Label>
+                  </div>
+                );
+              })}
+            </RadioGroup>
           </div>
-          
-          {/* Search Bar */}
-          <div className="mb-3">
-            <Input
-              placeholder={`Search or type custom ${data.filterType.toLowerCase()}...`}
-              value={searchQueries[data.filterType]}
-              onChange={(e) => handleSearchChange(data.filterType, e.target.value)}
-              className="text-sm"
-            />
-          </div>
-          
-          {/* Radio Options - always show all options */}
-          <RadioGroup 
-            value={selectedFilters[data.filterType]} 
-            onValueChange={(value) => changeHandler(data.filterType, value)}
-          >
-            {getAllOptions(data.filterType).map((item, idx) => {
-              const itemId = `${data.filterType}-${idx}`;
-              return (
-                <div key={idx} className="flex items-center space-x-2 my-2">
-                  <RadioGroupItem value={item} id={itemId} />
-                  <Label htmlFor={itemId} className="text-sm">{item}</Label>
-                </div>
-              );
-            })}
-          </RadioGroup>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
