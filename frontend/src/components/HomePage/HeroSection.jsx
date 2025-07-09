@@ -26,8 +26,7 @@ export default function HeroSection() {
           <span className="text-[#6A38C2]">Dream Job</span>
         </h1>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi
-          deleniti explicabo distinctio ut eum.
+        Join millions of professionals who found their perfect job match through our platform.
         </p>
         <div className="flex w-full max-w-md md:max-w-lg shadow-lg border border-gray-200 pl-3 rounded-full items-center gap-4 mx-auto">
           <input

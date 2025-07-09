@@ -63,7 +63,17 @@ export default function CompanySetup() {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
+      // Check if error has a response (HTTP error)
+      if (error.response) {
+        // Server responded with error status
+        toast.error(error.response.data?.message || "An error occurred");
+      } else if (error.request) {
+        // Request was made but no response received
+        toast.error("Network error. Please check your connection.");
+      } else {
+        // Something else happened
+        toast.error("An unexpected error occurred");
+      }
     } finally {
       setLoading(false);
     }
@@ -82,80 +92,83 @@ export default function CompanySetup() {
   return (
     <div>
       <Navbar />
-      <div className="max-w-xl mx-auto my-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 my-6 sm:my-10">
         <form onSubmit={submitHandler}>
-          <div className="flex items-center gap-5 p-8">
-            <Button
-              variant="outline"
-              onClick={() => navigate("/admin/companies")}
-              className="flex items-center gap-2 text-gray-700 font-semibold"
-            >
-              <ArrowLeft />
-              <span>Back</span>
-            </Button>
-            <h1 className="font-bold text-xl">Company Setup</h1>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-5 p-4 sm:p-6 lg:p-8">
+            <h1 className="font-bold text-lg sm:text-xl">Company Setup</h1>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Company Name</Label>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8">
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Company Name</Label>
               <Input
                 type="text"
                 name="name"
                 value={input.name}
                 onChange={changeEventHandler}
+                className="w-full"
               />
             </div>
-            <div>
-              <Label>Description</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Description</Label>
               <Input
                 type="text"
                 name="description"
                 value={input.description}
                 onChange={changeEventHandler}
+                className="w-full"
               />
             </div>
-            <div>
-              <Label>Website</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Website</Label>
               <Input
                 type="text"
                 name="website"
                 value={input.website}
                 onChange={changeEventHandler}
+                className="w-full"
+                placeholder="https://example.com"
               />
             </div>
-            <div>
-              <Label>Location</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Location</Label>
               <Input
                 type="text"
                 name="location"
                 value={input.location}
                 onChange={changeEventHandler}
+                className="w-full"
+                placeholder="City, Country"
               />
             </div>
-            <div>
-              <Label>Logo</Label>
+            <div className="space-y-2 sm:col-span-2">
+              <Label className="text-sm font-medium">Logo</Label>
               <Input
                 type="file"
                 accept="image/*"
                 onChange={changeFileHandler}
+                className="w-full"
               />
             </div>
           </div>
-          {loading ? (
-            <Button
-              disabled
-              className="w-full mt-6 bg-blue-600 hover:bg-blue-700"
-            >
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2"
-            >
-              Update
-            </Button>
-          )}
+
+          <div className="px-4 sm:px-6 lg:px-8">
+            {loading ? (
+              <Button
+                disabled
+                className="w-full mt-6 bg-blue-600 hover:bg-blue-700"
+              >
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2"
+              >
+                Update
+              </Button>
+            )}
+          </div>
         </form>
       </div>
     </div>

@@ -38,24 +38,38 @@ export default function NewCompany() {
   return (
     <div>
       <Navbar />
-      <div className="max-w-4xl mx-auto">
-        <div className="my-10">
-          <h1 className="font-bold text-2xl">Your Company Name</h1>
-          <p className="text-gray-500">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="my-6 sm:my-10">
+          <h1 className="font-bold text-xl sm:text-2xl">Your Company Name</h1>
+          <p className="text-gray-500 text-sm sm:text-base mt-2">
             Choose your company name (can change it later)
           </p>
         </div>
 
-        <Label>Company Name</Label>
-        <Input
-          type="text"
-          className="my-2"
-          placeholder="Enter your company name"
-          onChange={(e) => setCompanyName(e.target.value)}
-        />
-        <div className="flex items-center gap-2 my-10">
-          <Button variant="outline" onClick={() => navigate("/admin/companies")}>Cancel</Button>
-          <Button onClick={registerCompany}>Continue</Button>
+        <div className="space-y-4">
+          <Label className="text-sm font-medium">Company Name</Label>
+          <Input
+            type="text"
+            className="w-full"
+            placeholder="Enter your company name"
+            onChange={(e) => setCompanyName(e.target.value)}
+          />
+        </div>
+        
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-2 my-6 sm:my-10">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate("/admin/companies")}
+            className="w-full sm:w-auto order-2 sm:order-1"
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={registerCompany}
+            className="w-full sm:w-auto order-1 sm:order-2"
+          >
+            Continue
+          </Button>
         </div>
       </div>
     </div>
