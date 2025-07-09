@@ -148,44 +148,52 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100">
       <Navbar />
-      <div className="flex items-center justify-center max-w-7xl mx-auto px-4">
+      <div className="flex items-center justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form
           onSubmit={submitHandler}
-          className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-sm p-6 my-10"
+          className="w-full max-w-md bg-white border border-gray-200 rounded-xl shadow-lg p-6 sm:p-8 my-4 sm:my-10"
         >
-          <h1 className="font-bold text-2xl mb-6 text-center text-gray-800">Create Account</h1>
+          <h1 className="font-bold text-2xl sm:text-3xl mb-6 text-center text-gray-800">
+            Create Account
+          </h1>
           
-          <div className="space-y-4">
+          <div className="space-y-4 sm:space-y-5">
             <div>
-              <Label className="text-gray-700 font-medium">Full Name</Label>
+              <Label className="text-gray-700 font-medium text-sm sm:text-base">
+                Full Name
+              </Label>
               <Input
                 type="text"
                 value={input.fullname}
                 name="fullname"
                 onChange={changeEventHandler}
                 placeholder="Enter your full name"
-                className={`mt-1 ${errors.fullname ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
+                className={`mt-1 h-11 sm:h-12 ${errors.fullname ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
               />
-              {errors.fullname && <p className="text-red-500 text-sm mt-1">{errors.fullname}</p>}
+              {errors.fullname && <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.fullname}</p>}
             </div>
 
             <div>
-              <Label className="text-gray-700 font-medium">Email</Label>
+              <Label className="text-gray-700 font-medium text-sm sm:text-base">
+                Email
+              </Label>
               <Input
                 type="email"
                 value={input.email}
                 name="email"
                 onChange={changeEventHandler}
                 placeholder="Enter your email address"
-                className={`mt-1 ${errors.email ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
+                className={`mt-1 h-11 sm:h-12 ${errors.email ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+              {errors.email && <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.email}</p>}
             </div>
 
             <div>
-              <Label className="text-gray-700 font-medium">Phone Number</Label>
+              <Label className="text-gray-700 font-medium text-sm sm:text-base">
+                Phone Number
+              </Label>
               <Input
                 type="tel"
                 value={input.phoneNumber}
@@ -193,27 +201,31 @@ export default function SignUp() {
                 onChange={handlePhoneChange}
                 placeholder="Enter 10-digit phone number"
                 maxLength="10"
-                className={`mt-1 ${errors.phoneNumber ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
+                className={`mt-1 h-11 sm:h-12 ${errors.phoneNumber ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
               />
-              {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>}
+              {errors.phoneNumber && <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.phoneNumber}</p>}
             </div>
 
             <div>
-              <Label className="text-gray-700 font-medium">Password</Label>
+              <Label className="text-gray-700 font-medium text-sm sm:text-base">
+                Password
+              </Label>
               <Input
                 type="password"
                 value={input.password}
                 name="password"
                 onChange={changeEventHandler}
-                placeholder="Create a strong password (at least one special character)"
-                className={`mt-1 ${errors.password ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
+                placeholder="Create a strong password"
+                className={`mt-1 h-11 sm:h-12 ${errors.password ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"}`}
               />
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+              {errors.password && <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.password}</p>}
             </div>
 
             <div>
-              <Label className="text-gray-700 font-medium mb-3 block">Select Role</Label>
-              <RadioGroup className="flex items-center gap-6">
+              <Label className="text-gray-700 font-medium mb-3 block text-sm sm:text-base">
+                Select Role
+              </Label>
+              <RadioGroup className="flex items-center gap-4 sm:gap-6">
                 <div className="flex items-center gap-2">
                   <Input
                     type="radio"
@@ -223,7 +235,9 @@ export default function SignUp() {
                     onChange={changeEventHandler}
                     className="cursor-pointer w-4 h-4"
                   />
-                  <Label htmlFor="r1" className="cursor-pointer text-gray-700">Student</Label>
+                  <Label htmlFor="r1" className="cursor-pointer text-gray-700 text-sm sm:text-base">
+                    Student
+                  </Label>
                 </div>
                 <div className="flex items-center gap-2">
                   <Input
@@ -234,38 +248,54 @@ export default function SignUp() {
                     onChange={changeEventHandler}
                     className="cursor-pointer w-4 h-4"
                   />
-                  <Label htmlFor="r2" className="cursor-pointer text-gray-700">Recruiter</Label>
+                  <Label htmlFor="r2" className="cursor-pointer text-gray-700 text-sm sm:text-base">
+                    Recruiter
+                  </Label>
                 </div>
               </RadioGroup>
-              {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role}</p>}
+              {errors.role && <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.role}</p>}
             </div>
 
             <div>
-              <Label className="text-gray-700 font-medium">Profile Picture <span className="text-gray-500 font-normal">(Optional)</span></Label>
+              <Label className="text-gray-700 font-medium text-sm sm:text-base">
+                Profile Picture{" "}
+                <span className="text-gray-500 font-normal">(Optional)</span>
+              </Label>
               <Input
                 accept="image/*"
                 type="file"
                 onChange={changeFileHandler}
-                className="mt-1 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                className="mt-1 h-11 sm:h-12 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
-              <p className="text-gray-500 text-xs mt-1">You can add a profile picture now or later</p>
+              <p className="text-gray-500 text-xs mt-1">
+                You can add a profile picture now or later
+              </p>
             </div>
           </div>
           
           {loading ? (
-            <Button disabled className="w-full mt-6 bg-blue-600 hover:bg-blue-700">
+            <Button 
+              disabled 
+              className="w-full mt-6 sm:mt-8 bg-blue-600 hover:bg-blue-700 h-11 sm:h-12 text-sm sm:text-base"
+            >
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating Account...
             </Button>
           ) : (
-            <Button type="submit" className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2">
+            <Button 
+              type="submit" 
+              className="w-full mt-6 sm:mt-8 bg-blue-600 hover:bg-blue-700 text-white font-medium h-11 sm:h-12 text-sm sm:text-base transition-colors duration-200"
+            >
               Create Account
             </Button>
           )}
           
-          <div className="text-center mt-4">
-            <span className="text-gray-600 text-sm">
+          <div className="text-center mt-4 sm:mt-6">
+            <span className="text-gray-600 text-xs sm:text-sm">
               Already have an account?{" "}
-              <Link to="/login" className="text-blue-600 hover:text-blue-800 font-medium">
+              <Link 
+                to="/login" 
+                className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
+              >
                 Sign In
               </Link>
             </span>

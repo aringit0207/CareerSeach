@@ -87,16 +87,17 @@ export default function UpdateProfile({ open, setOpen }) {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
-          className="sm:max-w-[425px]"
+          className="sm:max-w-[425px] max-w-[95vw] max-h-[90vh] overflow-y-auto mx-4"
           onInteractOutside={() => setOpen(false)}
         >
           <DialogHeader>
-            <DialogTitle>Update Profile</DialogTitle>
+            <DialogTitle className="text-lg font-semibold">Update Profile</DialogTitle>
           </DialogHeader>
           <form onSubmit={submitHandler}>
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
+              {/* Mobile-first responsive grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-4 items-start sm:items-center gap-2 sm:gap-4">
+                <Label htmlFor="name" className="text-left sm:text-right font-medium">
                   Name
                 </Label>
                 <Input
@@ -105,11 +106,12 @@ export default function UpdateProfile({ open, setOpen }) {
                   type="text"
                   value={input.fullname}
                   onChange={changeEventHandler}
-                  className="col-span-3"
+                  className="sm:col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="email" className="text-right">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-4 items-start sm:items-center gap-2 sm:gap-4">
+                <Label htmlFor="email" className="text-left sm:text-right font-medium">
                   Email
                 </Label>
                 <Input
@@ -118,11 +120,12 @@ export default function UpdateProfile({ open, setOpen }) {
                   type="email"
                   value={input.email}
                   onChange={changeEventHandler}
-                  className="col-span-3"
+                  className="sm:col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="number" className="text-right">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-4 items-start sm:items-center gap-2 sm:gap-4">
+                <Label htmlFor="number" className="text-left sm:text-right font-medium">
                   Number
                 </Label>
                 <Input
@@ -130,11 +133,12 @@ export default function UpdateProfile({ open, setOpen }) {
                   name="phoneNumber"
                   value={input.phoneNumber}
                   onChange={changeEventHandler}
-                  className="col-span-3"
+                  className="sm:col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="bio" className="text-right">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-4 items-start sm:items-center gap-2 sm:gap-4">
+                <Label htmlFor="bio" className="text-left sm:text-right font-medium">
                   Bio
                 </Label>
                 <Input
@@ -142,11 +146,12 @@ export default function UpdateProfile({ open, setOpen }) {
                   name="bio"
                   value={input.bio}
                   onChange={changeEventHandler}
-                  className="col-span-3"
+                  className="sm:col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="skills" className="text-right">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-4 items-start sm:items-center gap-2 sm:gap-4">
+                <Label htmlFor="skills" className="text-left sm:text-right font-medium">
                   Skills
                 </Label>
                 <Input
@@ -154,11 +159,13 @@ export default function UpdateProfile({ open, setOpen }) {
                   name="skills"
                   value={input.skills}
                   onChange={changeEventHandler}
-                  className="col-span-3"
+                  className="sm:col-span-3"
+                  placeholder="e.g., JavaScript, React, Node.js"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="profilePhoto" className="text-right">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-4 items-start sm:items-center gap-2 sm:gap-4">
+                <Label htmlFor="profilePhoto" className="text-left sm:text-right font-medium">
                   Profile Pic
                 </Label>
                 <Input
@@ -167,11 +174,12 @@ export default function UpdateProfile({ open, setOpen }) {
                   type="file"
                   accept="image/*"
                   onChange={fileChangeHandler}
-                  className="col-span-3"
+                  className="sm:col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="resume" className="text-right">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-4 items-start sm:items-center gap-2 sm:gap-4">
+                <Label htmlFor="resume" className="text-left sm:text-right font-medium">
                   Resume
                 </Label>
                 <Input
@@ -180,22 +188,23 @@ export default function UpdateProfile({ open, setOpen }) {
                   type="file"
                   accept="application/pdf,.doc,.docx"
                   onChange={fileChangeHandler}
-                  className="col-span-3"
+                  className="sm:col-span-3"
                 />
               </div>
             </div>
-            <DialogFooter>
+            
+            <DialogFooter className="mt-6">
               {loading ? (
                 <Button
                   disabled
-                  className="w-full mt-6 bg-blue-600 hover:bg-blue-700"
+                  className="w-full bg-blue-600 hover:bg-blue-700"
                 >
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
                 </Button>
               ) : (
                 <Button
                   type="submit"
-                  className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2"
                 >
                   Update
                 </Button>

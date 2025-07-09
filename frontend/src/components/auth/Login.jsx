@@ -58,47 +58,51 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100">
       <Navbar />
-      <div className="flex items-center justify-center max-w-7xl mx-auto px-4">
+      <div className="flex items-center justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form
           onSubmit={submitHandler}
-          className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-sm p-6 my-10"
+          className="w-full max-w-md bg-white border border-gray-200 rounded-xl shadow-lg p-6 sm:p-8 my-4 sm:my-10"
         >
-          <h1 className="font-bold text-2xl mb-6 text-center text-gray-800">
+          <h1 className="font-bold text-2xl sm:text-3xl mb-6 sm:mb-8 text-center text-gray-800">
             Welcome Back
           </h1>
 
-          <div className="space-y-4">
+          <div className="space-y-4 sm:space-y-5">
             <div>
-              <Label className="text-gray-700 font-medium">Email</Label>
+              <Label className="text-gray-700 font-medium text-sm sm:text-base">
+                Email
+              </Label>
               <Input
                 type="email"
                 value={input.email}
                 name="email"
                 onChange={changeEventHandler}
                 placeholder="Enter your email address"
-                className="mt-1 focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 h-11 sm:h-12 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
             <div>
-              <Label className="text-gray-700 font-medium">Password</Label>
+              <Label className="text-gray-700 font-medium text-sm sm:text-base">
+                Password
+              </Label>
               <Input
                 type="password"
                 value={input.password}
                 name="password"
                 onChange={changeEventHandler}
                 placeholder="Enter your password"
-                className="mt-1 focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 h-11 sm:h-12 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
             <div>
-              <Label className="text-gray-700 font-medium mb-3 block">
+              <Label className="text-gray-700 font-medium mb-3 block text-sm sm:text-base">
                 Select Role
               </Label>
-              <RadioGroup className="flex items-center gap-6">
+              <RadioGroup className="flex items-center gap-4 sm:gap-6">
                 <div className="flex items-center gap-2">
                   <Input
                     type="radio"
@@ -108,7 +112,7 @@ export default function Login() {
                     onChange={changeEventHandler}
                     className="cursor-pointer w-4 h-4"
                   />
-                  <Label htmlFor="r1" className="cursor-pointer text-gray-700">
+                  <Label htmlFor="r1" className="cursor-pointer text-gray-700 text-sm sm:text-base">
                     Student
                   </Label>
                 </div>
@@ -121,7 +125,7 @@ export default function Login() {
                     onChange={changeEventHandler}
                     className="cursor-pointer w-4 h-4"
                   />
-                  <Label htmlFor="r2" className="cursor-pointer text-gray-700">
+                  <Label htmlFor="r2" className="cursor-pointer text-gray-700 text-sm sm:text-base">
                     Recruiter
                   </Label>
                 </div>
@@ -132,25 +136,25 @@ export default function Login() {
           {loading ? (
             <Button
               disabled
-              className="w-full mt-6 bg-blue-600 hover:bg-blue-700"
+              className="w-full mt-6 sm:mt-8 bg-blue-600 hover:bg-blue-700 h-11 sm:h-12 text-sm sm:text-base"
             >
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Signing In...
             </Button>
           ) : (
             <Button
               type="submit"
-              className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2"
+              className="w-full mt-6 sm:mt-8 bg-blue-600 hover:bg-blue-700 text-white font-medium h-11 sm:h-12 text-sm sm:text-base transition-colors duration-200"
             >
               Sign In
             </Button>
           )}
 
-          <div className="text-center mt-4">
-            <span className="text-gray-600 text-sm">
+          <div className="text-center mt-4 sm:mt-6">
+            <span className="text-gray-600 text-xs sm:text-sm">
               New User?{" "}
               <Link
                 to="/signup"
-                className="text-blue-600 hover:text-blue-800 font-medium"
+                className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
               >
                 Create Account
               </Link>
