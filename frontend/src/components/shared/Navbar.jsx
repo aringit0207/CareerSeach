@@ -31,63 +31,74 @@ export default function Navbar() {
     }
   };
 
+  // Helper function to render navigation links based on user role
+  const renderNavigationLinks = () => {
+    if (!user) return null;
+
+    if (user.role === "recruiter") {
+      return (
+        <ul className="flex font-medium items-center gap-5">
+          <li>
+            <Link
+              to="/admin/companies"
+              className="hover:text-[#F83000] cursor-pointer"
+            >
+              Companies
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/admin/jobs"
+              className="hover:text-[#F83000] cursor-pointer"
+            >
+              Jobs
+            </Link>
+          </li>
+        </ul>
+      );
+    }
+
+    if (user.role === "student") {
+      return (
+        <ul className="flex font-medium items-center gap-5">
+          <li>
+            <Link to="/jobs" className="hover:text-[#F83000] cursor-pointer">
+              Jobs
+            </Link>
+          </li>
+          <li>
+            <Link to="/browse" className="hover:text-[#F83000] cursor-pointer">
+              Browse
+            </Link>
+          </li>
+        </ul>
+      );
+    }
+
+    // Default navigation for other roles or fallback
+    return (
+      <ul className="flex font-medium items-center gap-5">
+        <li>
+          <Link to="/" className="hover:text-[#F83000] cursor-pointer">
+            Home
+          </Link>
+        </li>
+      </ul>
+    );
+  };
+
   return (
     <div className="bg-white">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
         <div>
-          <h1 className="text-2xl font-bold">
-            Career<span className="text-[#F83000]">Search</span>
-          </h1>
+          <Link to="/" className="cursor-pointer">
+            <h1 className="text-2xl font-bold">
+              Career<span className="text-[#F83000]">Search</span>
+            </h1>
+          </Link>
         </div>
         <div className="flex items-center gap-12">
-          {user && user.role == "recruiter" ? (
-            <>
-              <ul className="flex font-medium items-center gap-5">
-                <li>
-                  <Link
-                    to="/admin/companies"
-                    className="hover:text-[#F83000] cursor-pointer"
-                  >
-                    Companies
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/admin/jobs"
-                    className="hover:text-[#F83000] cursor-pointer"
-                  >
-                    Jobs
-                  </Link>
-                </li>
-              </ul>
-            </>
-          ) : (
-            <>
-              <ul className="flex font-medium items-center gap-5">
-                <li>
-                  <Link to="/" className="hover:text-[#F83000] cursor-pointer">
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/jobs"
-                    className="hover:text-[#F83000] cursor-pointer"
-                  >
-                    Jobs
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/browse"
-                    className="hover:text-[#F83000] cursor-pointer"
-                  >
-                    Browse
-                  </Link>
-                </li>
-              </ul>
-            </>
-          )}
+          {renderNavigationLinks()}
 
           {!user ? (
             <div className="flex items-center gap-2">
@@ -135,7 +146,7 @@ export default function Navbar() {
                     </div>
                   </div>
                   <div className="flex flex-col my-2 text-gray-600">
-                    {user && user.role == "student" && (
+                    {user && user.role === "student" && (
                       <div className="flex w-fit items-center gap-2 cursor-pointer">
                         <User2 />
                         <Button variant="link">
