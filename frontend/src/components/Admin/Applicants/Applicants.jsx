@@ -29,12 +29,13 @@ export default function Applicants() {
     };
     fetchAllApplicants();
   }, []);
+
   return (
     <div>
       <Navbar />
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="font-bold text-xl my-5">
-          Applicants ({applicants?.applications?.length})
+          Applicants ({applicants?.applications?.length || 0})
         </h1>
         <ApplicantsTable />
       </div>

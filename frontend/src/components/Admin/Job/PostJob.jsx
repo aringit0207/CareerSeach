@@ -86,6 +86,7 @@ export default function PostJob() {
                 name="title"
                 value={input.title}
                 onChange={changeEventHandler}
+                placeholder="Enter the title"
                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
               />
             </div>
@@ -96,6 +97,7 @@ export default function PostJob() {
                 name="description"
                 value={input.description}
                 onChange={changeEventHandler}
+                placeholder="Enter the requirements"
                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
               />
             </div>
@@ -106,6 +108,7 @@ export default function PostJob() {
                 name="requirements"
                 value={input.requirements}
                 onChange={changeEventHandler}
+                placeholder="Enter the requirements"
                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
               />
             </div>
@@ -116,6 +119,7 @@ export default function PostJob() {
                 name="salary"
                 value={input.salary}
                 onChange={changeEventHandler}
+                placeholder="Salary in LPA"
                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
               />
             </div>
@@ -126,6 +130,7 @@ export default function PostJob() {
                 name="location"
                 value={input.location}
                 onChange={changeEventHandler}
+                placeholder="Enter the location of job"
                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
               />
             </div>
@@ -136,6 +141,7 @@ export default function PostJob() {
                 name="jobType"
                 value={input.jobType}
                 onChange={changeEventHandler}
+                placeholder="Enter the job type"
                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
               />
             </div>
