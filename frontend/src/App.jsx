@@ -12,9 +12,10 @@ import CompanySetup from "./components/Admin/Company/CompanySetup.jsx";
 import AdminJobs from "./components/Admin/Job/AdminJobs.jsx";
 import PostJob from "./components/Admin/Job/PostJob.jsx";
 import Applicants from "./components/Admin/Applicants/Applicants.jsx";
+import RecruiterRouteProtection from "./components/RouteProtection/RecruiterRouteProtection.jsx";
+import StudentRouteProtection from "./components/RouteProtection/StudentRouteProtection.jsx";
 
 const appRouter = createBrowserRouter([
-  // client side
   {
     path: "/",
     element: <Home />,
@@ -27,47 +28,49 @@ const appRouter = createBrowserRouter([
     path: "/signup",
     element: <SignUp />,
   },
+  
+  // client side
   {
     path: "/jobs",
     element: <Jobs />,
   },
   {
     path: "/description/:id",
-    element: <JobDescription />,
+    element: <StudentRouteProtection><JobDescription /></StudentRouteProtection>,
   },
   {
     path: "/browse",
-    element: <Browse />,
+    element: <StudentRouteProtection><Browse /></StudentRouteProtection>,
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: <StudentRouteProtection><Profile /></StudentRouteProtection>,
   },
 
   // admin side
   {
     path: "/admin/companies",
-    element: <Companies />,
+    element: <RecruiterRouteProtection><Companies /></RecruiterRouteProtection>,
   },
   {
     path: "/admin/companies/create",
-    element: <NewCompany />,
+    element: <RecruiterRouteProtection><NewCompany /></RecruiterRouteProtection>,
   },
   {
     path: "/admin/companies/:id",
-    element: <CompanySetup />,
+    element: <RecruiterRouteProtection><CompanySetup /></RecruiterRouteProtection>,
   },
   {
     path: "/admin/jobs",
-    element: <AdminJobs />,
+    element: <RecruiterRouteProtection><AdminJobs /></RecruiterRouteProtection>,
   },
   {
     path: "/admin/jobs/create",
-    element: <PostJob />,
+    element: <RecruiterRouteProtection><PostJob /></RecruiterRouteProtection>,
   },
   {
     path: "/admin/jobs/:id/applicants",
-    element: <Applicants />,
+    element: <RecruiterRouteProtection><Applicants /></RecruiterRouteProtection>,
   }
 ]);
 

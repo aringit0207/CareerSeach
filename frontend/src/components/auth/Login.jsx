@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../shared/Navbar.jsx";
 import { Label } from "../ui/label.jsx";
 import { Input } from "../ui/input.jsx";
@@ -21,7 +21,13 @@ export default function Login() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading } = useSelector((store) => store.auth);
+  const { loading, user } = useSelector((store) => store.auth);
+
+  useEffect(() => {
+    if(user) {
+      navigate("/");
+    }
+  }, []);
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -59,8 +65,10 @@ export default function Login() {
           onSubmit={submitHandler}
           className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-sm p-6 my-10"
         >
-          <h1 className="font-bold text-2xl mb-6 text-center text-gray-800">Welcome Back</h1>
-          
+          <h1 className="font-bold text-2xl mb-6 text-center text-gray-800">
+            Welcome Back
+          </h1>
+
           <div className="space-y-4">
             <div>
               <Label className="text-gray-700 font-medium">Email</Label>
@@ -73,7 +81,7 @@ export default function Login() {
                 className="mt-1 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-            
+
             <div>
               <Label className="text-gray-700 font-medium">Password</Label>
               <Input
@@ -87,7 +95,9 @@ export default function Login() {
             </div>
 
             <div>
-              <Label className="text-gray-700 font-medium mb-3 block">Select Role</Label>
+              <Label className="text-gray-700 font-medium mb-3 block">
+                Select Role
+              </Label>
               <RadioGroup className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
                   <Input
@@ -98,7 +108,9 @@ export default function Login() {
                     onChange={changeEventHandler}
                     className="cursor-pointer w-4 h-4"
                   />
-                  <Label htmlFor="r1" className="cursor-pointer text-gray-700">Student</Label>
+                  <Label htmlFor="r1" className="cursor-pointer text-gray-700">
+                    Student
+                  </Label>
                 </div>
                 <div className="flex items-center gap-2">
                   <Input
@@ -109,18 +121,26 @@ export default function Login() {
                     onChange={changeEventHandler}
                     className="cursor-pointer w-4 h-4"
                   />
-                  <Label htmlFor="r2" className="cursor-pointer text-gray-700">Recruiter</Label>
+                  <Label htmlFor="r2" className="cursor-pointer text-gray-700">
+                    Recruiter
+                  </Label>
                 </div>
               </RadioGroup>
             </div>
           </div>
 
           {loading ? (
-            <Button disabled className="w-full mt-6 bg-blue-600 hover:bg-blue-700">
+            <Button
+              disabled
+              className="w-full mt-6 bg-blue-600 hover:bg-blue-700"
+            >
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Signing In...
             </Button>
           ) : (
-            <Button type="submit" className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2">
+            <Button
+              type="submit"
+              className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2"
+            >
               Sign In
             </Button>
           )}
@@ -128,7 +148,10 @@ export default function Login() {
           <div className="text-center mt-4">
             <span className="text-gray-600 text-sm">
               New User?{" "}
-              <Link to="/signup" className="text-blue-600 hover:text-blue-800 font-medium">
+              <Link
+                to="/signup"
+                className="text-blue-600 hover:text-blue-800 font-medium"
+              >
                 Create Account
               </Link>
             </span>
