@@ -6,6 +6,7 @@ import { LogOut, User2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "@/redux/authSlice.js";
+import { setSearchedQuery } from "@/redux/jobSlice";
 import { toast } from "sonner";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constant.js";
@@ -29,6 +30,11 @@ export default function Navbar() {
       console.log(error);
       toast.error(error.response?.data?.message || "Logout failed");
     }
+  };
+
+  const handleBrowseClick = () => {
+    dispatch(setSearchedQuery(""));
+    navigate("/browse");
   };
 
   // Helper function to render navigation links based on user role
@@ -67,9 +73,12 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link to="/browse" className="hover:text-[#F83000] cursor-pointer">
+            <button
+              onClick={handleBrowseClick}
+              className="hover:text-[#F83000] cursor-pointer"
+            >
               Browse
-            </Link>
+            </button>
           </li>
         </ul>
       );

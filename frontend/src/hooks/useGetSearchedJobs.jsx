@@ -9,14 +9,16 @@ export default function useGetSearchedJobs() {
   const { searchedQuery } = useSelector((store) => store.job);
   
   useEffect(() => {
-    const fetchSearchedJobs = async () => {
+    const fetchJobs = async () => {
       try {
-        const res = await axios.get(
-          `${JOB_API_END_POINT}/get?keyword=${searchedQuery}`,
-          {
-            withCredentials: true,
-          }
-        );
+        // If there's a search query, use it. Otherwise, fetch all jobs
+        const endpoint = searchedQuery 
+          ? `${JOB_API_END_POINT}/get?keyword=${searchedQuery}`
+          : `${JOB_API_END_POINT}/get`;
+          
+        const res = await axios.get(endpoint, {
+          withCredentials: true,
+        });
 
         if (res.data.success) {
           dispatch(setSearchedJobs(res.data.jobs));
@@ -26,9 +28,6 @@ export default function useGetSearchedJobs() {
       }
     };
     
-    // Only fetch if there's a search query
-    if (searchedQuery) {
-      fetchSearchedJobs();
-    }
-  }, [searchedQuery]); // Add searchedQuery as dependency
+    fetchJobs();
+  }, [searchedQuery, dispatch]);
 }
